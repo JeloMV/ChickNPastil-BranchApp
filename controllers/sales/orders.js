@@ -4,7 +4,7 @@ const paymongo = require('./paymongo');
 
 const orderStatuses = ['Pending', 'Preparing', 'Completed', 'Cancelled'];
 const paymentStatuses = ['Pending', 'Verified', 'Failed', 'Refunded'];
-const isManager = req => ['admin', 'manager'].includes(req.session.user.role);
+const isManager = req => ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
 const branchFor = req => req.session.user.branchLocationName;
 
 function canAccessOrder(req, res, orderId) {

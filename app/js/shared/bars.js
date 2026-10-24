@@ -69,15 +69,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const applyRoleVisibility = (role) => {
+        const normalizedRole = (role || "").trim().toLowerCase();
+        const isStaffRole = ["staff", "vendor", "cashier"].includes(normalizedRole);
+        const isManagerRole = ["admin", "manager"].includes(normalizedRole);
         document.querySelectorAll('[class*="role-"]').forEach((element) => {
           const allowedRoles = Array.from(element.classList)
             .filter((className) => className.startsWith("role-"))
-            .map((className) => className.slice("role-".length));
+            .map((className) => className.slice("role-".length).toLowerCase());
 
           if (allowedRoles.length === 0) return;
 
           const navItem = element.matches(".nav-link") && element.closest("li");
-          (navItem || element).hidden = !allowedRoles.includes(role);
+          let hasAccess = false;
+          if (allowedRoles.includes(normalizedRole)) {
+            hasAccess = true;
+          } else if (isStaffRole && (allowedRoles.includes("staff") || allowedRoles.includes("vendor"))) {
+            hasAccess = true;
+          } else if (isManagerRole && (allowedRoles.includes("admin") || allowedRoles.includes("manager"))) {
+            hasAccess = true;
+          }
+
+          (navItem || element).hidden = !hasAccess;
         });
       };
 

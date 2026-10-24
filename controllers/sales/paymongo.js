@@ -44,7 +44,7 @@ async function createLink(req, res) {
     `).get(orderId)) {
         return res.status(409).json({ success: false, error: 'This order cannot accept another payment link.' });
     }
-    const manager = ['admin', 'manager'].includes(req.session.user.role);
+    const manager = ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
     if (!manager && order.branch_name !== req.session.user.branchLocationName) return res.sendStatus(403);
 
     try {
@@ -80,7 +80,7 @@ async function createLink(req, res) {
 async function checkStatus(req, res) {
     const order = db.prepare('SELECT branch_name FROM orders WHERE paymongo_link_id = ?').get(req.params.linkId);
     if (!order) return res.status(404).json({ success: false, error: 'Payment link not found' });
-    const manager = ['admin', 'manager'].includes(req.session.user.role);
+    const manager = ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
     if (!manager && order.branch_name !== req.session.user.branchLocationName) return res.sendStatus(403);
     try {
         const link = await request(`/links/${encodeURIComponent(req.params.linkId)}`);

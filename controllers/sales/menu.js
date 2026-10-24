@@ -7,7 +7,7 @@ function failure(res, error, label) {
 
 function list(req, res) {
     try {
-        const includeArchived = req.query.includeArchived === 'true' && ['admin', 'manager'].includes(req.session.user.role);
+        const includeArchived = req.query.includeArchived === 'true' && ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
         const sections = db.prepare(`
             SELECT * FROM menu_section ${includeArchived ? '' : 'WHERE COALESCE(is_archived, 0) = 0'}
             ORDER BY section_id

@@ -10,7 +10,8 @@ const receiveStock = require('../controllers/supply/receive_stock');
 const router = express.Router();
 
 const requireFulfillmentManager = (req, res, next) => {
-    if (req.session.user.role !== 'admin' && req.session.user.role !== 'manager') {
+    const role = (req.session?.user?.role || '').toLowerCase();
+    if (role !== 'admin' && role !== 'manager') {
         return res.sendStatus(403);
     }
     next();

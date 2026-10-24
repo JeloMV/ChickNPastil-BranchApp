@@ -2,7 +2,7 @@ const db = require('../../lib/database');
 
 function stats(req, res) {
     try {
-        const manager = ['admin', 'manager'].includes(req.session.user.role);
+        const manager = ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
         const requestedBranch = typeof req.query.branch === 'string' ? req.query.branch : '';
         const branch = manager ? requestedBranch : req.session.user.branchLocationName;
         const filters = [];

@@ -7,7 +7,7 @@ const paymongo = require('../controllers/sales/paymongo');
 
 const pages = express.Router();
 const api = express.Router();
-const isManager = req => ['admin', 'manager'].includes(req.session.user.role);
+const isManager = req => ['admin', 'manager'].includes((req.session?.user?.role || '').toLowerCase());
 const requireManager = (req, res, next) => {
     if (!isManager(req)) return res.sendStatus(403);
     next();
