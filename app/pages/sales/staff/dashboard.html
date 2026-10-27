@@ -263,7 +263,7 @@
     }
 
     async function loadDashboard() {
-      const user = window.getCurrentUser ? window.getCurrentUser() : { branch: 'Balagtas' };
+      const user = (window.getCurrentUser && window.getCurrentUser()) || { branch: '' };
       const branch = user.branch || 'Balagtas';
 
       // Date label

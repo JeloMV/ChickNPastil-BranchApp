@@ -458,13 +458,13 @@
     }
 
     async function fetchStaffTransactions() {
-      const user = window.getCurrentUser ? window.getCurrentUser() : { branch: 'Balagtas' };
+      const user = (window.getCurrentUser && window.getCurrentUser()) || { branch: '' };
       const search = document.getElementById('staff-search-input').value;
 
       let query = new URLSearchParams();
       query.append('todayOnly', 'true'); // Auto-archived from staff view: only today's logs
       if (search) query.append('search', search);
-      query.append('branch', user.branch || 'Balagtas');
+      if (user.branch) query.append('branch', user.branch);
       if (activeFilterStatus !== 'All') query.append('status', activeFilterStatus);
 
       try {
