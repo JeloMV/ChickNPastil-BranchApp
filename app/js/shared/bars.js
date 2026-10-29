@@ -1,6 +1,19 @@
 let currentSessionUser = null;
 window.getCurrentUser = () => currentSessionUser;
 
+// SQLite stores timestamps in UTC without a zone ("YYYY-MM-DD HH:MM:SS"); display them in Philippine time.
+window.APP_TIME_ZONE = "Asia/Manila";
+window.parseDbDate = (value) => {
+  if (!value) return new Date(NaN);
+  const text = String(value).trim().replace(" ", "T");
+  return new Date(/(Z|[+-]\d{2}:?\d{2})$/i.test(text) ? text : `${text}Z`);
+};
+window.formatDbDate = (value, options = {}, method = "toLocaleString") => {
+  const date = value instanceof Date ? value : window.parseDbDate(value);
+  if (Number.isNaN(date.getTime())) return value || "—";
+  return date[method]("en-PH", { ...options, timeZone: window.APP_TIME_ZONE });
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   // 1. Fetch reusable components from bars.html
   fetch("../../assets/html/bars.html")

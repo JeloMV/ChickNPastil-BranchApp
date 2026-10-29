@@ -718,7 +718,7 @@
         if (payStatus === 'Failed') payBadge = '<span class="badge-status badge-pay-failed">Failed</span>';
         if (payStatus === 'Refunded') payBadge = '<span class="badge-status badge-pay-refunded">Refunded</span>';
 
-        const dateFormatted = new Date(t.order_datetime).toLocaleString();
+        const dateFormatted = formatDbDate(t.order_datetime);
 
         return `
           <tr>
@@ -760,7 +760,7 @@
       document.getElementById('modal-detail-order-id').textContent = `#${String(order.order_id).padStart(4, '0')}`;
       document.getElementById('modal-detail-txn-no').textContent = order.transaction_number || 'Pending';
       document.getElementById('modal-detail-branch').textContent = order.branch_name || 'Balagtas';
-      document.getElementById('modal-detail-datetime').textContent = new Date(order.order_datetime).toLocaleString();
+      document.getElementById('modal-detail-datetime').textContent = formatDbDate(order.order_datetime);
 
       // Editable form controls
       document.getElementById('edit-cust-name').value = order.cust_name || 'Walk-in Customer';
@@ -901,7 +901,7 @@
       const user = window.getCurrentUser ? window.getCurrentUser() : { branch: 'Balagtas' };
 
       document.getElementById('receipt-branch-name').textContent = `${order.branch_name || user.branch || 'Balagtas'} Branch`;
-      document.getElementById('receipt-date-time').textContent = new Date(order.order_datetime).toLocaleString();
+      document.getElementById('receipt-date-time').textContent = formatDbDate(order.order_datetime);
       document.getElementById('receipt-order-id').textContent = `#${String(order.order_id).padStart(4, '0')}`;
       document.getElementById('receipt-order-type').textContent = order.order_type || 'Dine-In';
       document.getElementById('receipt-cust-name').textContent = order.cust_name || 'Walk-in Customer';
@@ -1213,7 +1213,7 @@
         t.order_status,
         t.payment_status || 'Pending',
         t.payment_method || 'Unpaid',
-        new Date(t.order_datetime).toLocaleDateString()
+        formatDbDate(t.order_datetime, {}, 'toLocaleDateString')
       ]);
 
       doc.autoTable({

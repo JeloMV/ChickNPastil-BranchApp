@@ -90,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('tr');
             appendCell(row, `#${request.id}`, 'ps-3 fw-semibold');
             appendCell(row, request.branch_name);
-            const date = new Date(`${request.date_and_time.replace(' ', 'T')}Z`);
-            appendCell(row, Number.isNaN(date.getTime()) ? request.date_and_time : date.toLocaleString());
+            appendCell(row, formatDbDate(request.date_and_time));
             appendCell(row, request.request_note || '—');
 
             const statusCell = appendCell(row, '');
@@ -195,8 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderRequestDetails = (request, items) => {
         document.getElementById('expenseDetailsTitle').textContent = `Expense request #${request.id}`;
-        const date = new Date(`${request.date_and_time.replace(' ', 'T')}Z`);
-        const submittedAt = Number.isNaN(date.getTime()) ? request.date_and_time : date.toLocaleString();
+        const submittedAt = formatDbDate(request.date_and_time);
         document.getElementById('expenseDetailsMeta').textContent =
             `${request.status} · Submitted ${submittedAt}`;
         document.getElementById('expenseDetailsSubmittedBy').textContent =

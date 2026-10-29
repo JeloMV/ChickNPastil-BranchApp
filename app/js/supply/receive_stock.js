@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const formatQuantity = (value) => Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
-    const formatDate = (value) => new Date(value.replace(' ', 'T')).toLocaleString();
+    const formatDate = (value) => formatDbDate(value);
     const getStatusLabel = (status) => statusLabels[status] || status;
 
     const sendRequest = async (url, options = {}) => {

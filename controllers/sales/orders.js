@@ -166,10 +166,10 @@ function list(req, res) {
             sql += ' AND o.branch_name = ?';
             values.push(effectiveBranch);
         }
-        if (todayOnly === 'true' || today === '1') sql += " AND DATE(o.order_datetime) = DATE('now')";
+        if (todayOnly === 'true' || today === '1') sql += " AND DATE(o.order_datetime, '+8 hours') = DATE('now', '+8 hours')";
         else {
-            if (startDate) { sql += ' AND DATE(o.order_datetime) >= ?'; values.push(startDate); }
-            if (endDate) { sql += ' AND DATE(o.order_datetime) <= ?'; values.push(endDate); }
+            if (startDate) { sql += " AND DATE(o.order_datetime, '+8 hours') >= ?"; values.push(startDate); }
+            if (endDate) { sql += " AND DATE(o.order_datetime, '+8 hours') <= ?"; values.push(endDate); }
         }
         if (status && status !== 'All') { sql += ' AND o.order_status = ?'; values.push(status); }
         if (paymentMethod && paymentMethod !== 'All') { sql += ' AND p.payment_method = ?'; values.push(paymentMethod); }

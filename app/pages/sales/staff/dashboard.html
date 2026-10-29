@@ -258,8 +258,7 @@
 
     function formatTime(dt) {
       if (!dt) return '—';
-      const d = new Date(dt);
-      return d.toLocaleTimeString('en-PH', { hour: '2-digit', minute: '2-digit' });
+      return formatDbDate(dt, { hour: '2-digit', minute: '2-digit' }, 'toLocaleTimeString');
     }
 
     async function loadDashboard() {

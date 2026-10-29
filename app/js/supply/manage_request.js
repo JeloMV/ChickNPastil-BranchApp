@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formatQuantity = (quantity) =>
         Number(quantity).toLocaleString(undefined, { maximumFractionDigits: 2 });
 
-    const formatDate = (dateTime) => new Date(dateTime.replace(' ', 'T')).toLocaleString();
+    const formatDate = (dateTime) => formatDbDate(dateTime);
 
     const normalizeStatus = (status) => status.toLowerCase().replace(/\s+/g, '_');
     const getStatusLabel = (status) => statusLabels[normalizeStatus(status)] || status;
@@ -78,10 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         requests.sort((left, right) => {
-            if (sort === 'oldest') return new Date(left.dateAndTime) - new Date(right.dateAndTime);
+            if (sort === 'oldest') return parseDbDate(left.dateAndTime) - parseDbDate(right.dateAndTime);
             if (sort === 'branch') return left.branchName.localeCompare(right.branchName);
             if (sort === 'status') return getStatusLabel(left.status).localeCompare(getStatusLabel(right.status));
-            return new Date(right.dateAndTime) - new Date(left.dateAndTime);
+            return parseDbDate(right.dateAndTime) - parseDbDate(left.dateAndTime);
         });
         return requests;
     };

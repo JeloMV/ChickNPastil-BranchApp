@@ -63,9 +63,7 @@ const actionButton = (label, icon, className, handler, disabled = false) => {
 
 const formatDate = (date) => {
     if (!date) return '—';
-    const parsed = new Date(date.replace(' ', 'T') + (date.includes('Z') ? '' : 'Z'));
-    if (Number.isNaN(parsed.getTime())) return date;
-    return new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' }).format(parsed);
+    return formatDbDate(date, { year: 'numeric', month: 'short', day: 'numeric' }, 'toLocaleDateString');
 };
 
 const setEmptyRow = (tbody, columns, message) => {

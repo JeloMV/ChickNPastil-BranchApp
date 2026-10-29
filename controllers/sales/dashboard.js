@@ -11,7 +11,7 @@ function stats(req, res) {
             filters.push('o.branch_name = ?');
             values.push(branch);
         }
-        if (req.query.filter === 'today') filters.push("DATE(o.order_datetime) = DATE('now')");
+        if (req.query.filter === 'today') filters.push("DATE(o.order_datetime, '+8 hours') = DATE('now', '+8 hours')");
         const where = filters.length ? `WHERE ${filters.join(' AND ')}` : '';
         const orders = db.prepare(`
             SELECT o.order_id, o.order_total, o.order_status, p.payment_method, p.payment_status
@@ -49,7 +49,7 @@ function stats(req, res) {
         }];
 
         const demandValues = [];
-        let demandWhere = "WHERE DATE(o.order_datetime) = DATE('now') AND o.order_status != 'Cancelled'";
+        let demandWhere = "WHERE DATE(o.order_datetime, '+8 hours') = DATE('now', '+8 hours') AND o.order_status != 'Cancelled'";
         if (branch && branch !== 'All Branches') {
             demandWhere += ' AND o.branch_name = ?';
             demandValues.push(branch);
