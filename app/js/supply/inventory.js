@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     const formatQuantity = (value) => Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 });
-    const formatDate = (value) => formatDbDate(value);
+    const formatDate = (value) => new Date(`${value.replace(' ', 'T')}Z`).toLocaleString();
 
     const showError = (message) => {
         errorMessage.textContent = message;

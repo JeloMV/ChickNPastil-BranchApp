@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })}`;
 
     const formatDate = (value) => {
-        return formatDbDate(value);
+        const date = new Date(value.replace(' ', 'T'));
+        return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
     };
 
     const getTodayRange = () => {
@@ -83,15 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 expense.request_note || '',
                 expense.item_names || '',
             ].some((value) => value.toLowerCase().includes(search));
-            const submittedAt = parseDbDate(expense.date_and_time);
+            const submittedAt = new Date(expense.date_and_time.replace(' ', 'T'));
             return matchesSearch && matchesDate(submittedAt) && (!status || expense.status === status);
         });
 
         requests.sort((left, right) => {
-            if (sort === 'oldest') return parseDbDate(left.date_and_time) - parseDbDate(right.date_and_time);
+            if (sort === 'oldest') return new Date(left.date_and_time) - new Date(right.date_and_time);
             if (sort === 'highest') return right.total_price - left.total_price;
             if (sort === 'lowest') return left.total_price - right.total_price;
-            return parseDbDate(right.date_and_time) - parseDbDate(left.date_and_time);
+            return new Date(right.date_and_time) - new Date(left.date_and_time);
         });
         return requests;
     };
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const approvedTotal = state.requests
             .filter((expense) => {
                 if (!['approved', 'completed'].includes(expense.status)) return false;
-                const submittedAt = parseDbDate(expense.date_and_time);
+                const submittedAt = new Date(expense.date_and_time.replace(' ', 'T'));
                 return submittedAt >= today && submittedAt < tomorrow;
             })
             .reduce((total, expense) => total + Number(expense.total_price), 0);
